@@ -26,7 +26,12 @@ CREATE TABLE listing (
     area        TEXT NOT NULL,
     rent        INTEGER NOT NULL CHECK (rent > 0),
     rooms       INTEGER NOT NULL CHECK (rooms BETWEEN 1 AND 6),
-    posted_at   TIMESTAMP NOT NULL DEFAULT NOW()
+    size_m2     INTEGER CHECK (size_m2 > 0),
+    status      TEXT NOT NULL DEFAULT 'available' CHECK (status IN ('available', 'reserved', 'rented')),
+    external_id TEXT NOT NULL,  -- the provider's own id for the listing, e.g. Kereby's card id
+    url         TEXT,           -- link to the listing page; rented listings often have none
+    posted_at   TIMESTAMP NOT NULL DEFAULT NOW(),
+    UNIQUE (provider_id, external_id)
 );
 
 CREATE TABLE watch_profile (
