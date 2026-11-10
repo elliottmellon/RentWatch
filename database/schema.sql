@@ -1,6 +1,7 @@
 -- RentWatch database schema
--- Rerunnable: drops all tables first, then recreates them.
+-- Rerunnable: drops the view and all tables first, then recreates them.
 
+DROP VIEW IF EXISTS match_candidate;
 DROP TABLE IF EXISTS match;
 DROP TABLE IF EXISTS watch_profile;
 DROP TABLE IF EXISTS listing;
@@ -50,3 +51,24 @@ CREATE TABLE match (
     status           TEXT NOT NULL DEFAULT 'new' CHECK (status IN ('new', 'seen', 'applied')),
     UNIQUE (listing_id, watch_profile_id)
 );
+
+-- Every available listing that fits a watch profile.
+-- A listing fits when it comes from the profile's provider, is in the
+-- profile's area, costs no more than max_rent and has at least min_rooms.
+CREATE VIEW match_candidate AS
+SELECT
+    wp.id      AS watch_profile_id,
+    wp.user_id,
+    l.id       AS listing_id,
+    l.address,
+    l.area,
+    l.rent,
+    l.rooms,
+    l.url
+FROM watch_profile wp
+JOIN listing l
+    ON  l.provider_id = wp.provider_id
+    AND l.area        = wp.area
+    AND l.rent       <= wp.max_rent
+    AND l.rooms      >= wp.min_rooms
+WHERE l.status = 'available';
