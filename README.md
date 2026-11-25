@@ -2,13 +2,19 @@
 
 RentWatch lets students save rental search alerts and track matching Copenhagen listings.
 
+## Diagrams
+
+- [Overview](docs/overview.md): how the scraper, database, API and frontend fit together
+- [E-R diagram](docs/er-diagram.md): the database tables and how they relate
+
 ## Folders
 
 | Folder      | What it holds                         | Owner   |
 |-------------|---------------------------------------|---------|
 | `database/` | `schema.sql` (tables), `seed.sql` (test data) | Elliott |
-| `backend/`  | C# Web API (Npgsql)                   | TBD     |
-| `frontend/` | Angular app                           | TBD     |
+| `scraper/`  | Kereby scraper, C# console app (planned) | Elliott |
+| `backend/`  | C# Web API (Npgsql)                   | Rose and Niklas |
+| `frontend/` | Angular app                           | Rose and Niklas |
 | `docs/`     | Report material, diagrams             | All     |
 
 ## Run it on a fresh laptop
