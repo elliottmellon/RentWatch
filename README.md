@@ -6,6 +6,7 @@ RentWatch lets students save rental search alerts and track matching Copenhagen 
 
 - [Overview](docs/overview.md): how the scraper, database, API and frontend fit together
 - [E-R diagram](docs/er-diagram.md): the database tables and how they relate
+- [Docs folder](docs/README.md): start here for the API contract, backend SQL and requirements checklist
 
 ## Folders
 
