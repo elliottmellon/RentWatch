@@ -2,7 +2,7 @@
 -- Rerunnable: empties all tables and resets ids before inserting.
 -- Rent is in DKK per month.
 
-TRUNCATE match, watch_profile, listing, provider, app_user RESTART IDENTITY CASCADE;
+TRUNCATE watch_profile, listing, provider, app_user RESTART IDENTITY CASCADE;
 
 INSERT INTO provider (name, base_url) VALUES
     ('Kereby Udlejning', 'https://kereby.dk/bolig/'),       -- id 1
@@ -34,11 +34,5 @@ INSERT INTO watch_profile (user_id, provider_id, area, max_rent, min_rooms) VALU
     (3, 1, 'Østerbro',      15000, 3),   -- id 3: Sofie, Kereby
     (1, 2, 'Amager',        12000, 2);   -- id 4: Maja, Nordlys
 
--- Every match fits its profile on provider, area, rent and rooms.
-INSERT INTO match (listing_id, watch_profile_id, status) VALUES
-    (1,  1, 'seen'),      -- Gammel Kongevej: 12500 <= 13000, 2 rooms
-    (7,  2, 'new'),       -- Blågårdsgade: 8900 <= 14000, 1 room
-    (8,  2, 'applied'),   -- Nørrebrogade: 13500 <= 14000, 3 rooms
-    (5,  3, 'new'),       -- Classensgade: 14800 <= 15000, 3 rooms
-    (11, 4, 'new'),       -- Amagerbrogade: 8700 <= 12000, 2 rooms
-    (12, 4, 'seen');      -- Holmbladsgade: 11900 <= 12000, 3 rooms
+-- The match_candidate view finds 6 matches in this data:
+-- profile 1: listing 1 | profile 2: listings 7, 8 | profile 3: listing 5 | profile 4: listings 11, 12
