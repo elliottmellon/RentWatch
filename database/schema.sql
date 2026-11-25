@@ -2,7 +2,7 @@
 -- Rerunnable: drops the view and all tables first, then recreates them.
 
 DROP VIEW IF EXISTS match_candidate;
-DROP TABLE IF EXISTS match;
+DROP TABLE IF EXISTS match;  -- table removed from the design; this line cleans up older local databases
 DROP TABLE IF EXISTS watch_profile;
 DROP TABLE IF EXISTS listing;
 DROP TABLE IF EXISTS provider;
@@ -42,14 +42,6 @@ CREATE TABLE watch_profile (
     area        TEXT NOT NULL,
     max_rent    INTEGER NOT NULL CHECK (max_rent > 0),
     min_rooms   INTEGER NOT NULL CHECK (min_rooms BETWEEN 1 AND 6)
-);
-
-CREATE TABLE match (
-    id               SERIAL PRIMARY KEY,
-    listing_id       INTEGER NOT NULL REFERENCES listing (id) ON DELETE CASCADE,
-    watch_profile_id INTEGER NOT NULL REFERENCES watch_profile (id) ON DELETE CASCADE,
-    status           TEXT NOT NULL DEFAULT 'new' CHECK (status IN ('new', 'seen', 'applied')),
-    UNIQUE (listing_id, watch_profile_id)
 );
 
 -- Every available listing that fits a watch profile.

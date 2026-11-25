@@ -7,8 +7,6 @@ erDiagram
     app_user ||--o{ watch_profile : "creates"
     provider ||--o{ watch_profile : "is watched in"
     provider ||--o{ listing : "publishes"
-    listing ||--o{ match : "appears in"
-    watch_profile ||--o{ match : "finds"
 
     app_user {
         int id PK
@@ -41,12 +39,6 @@ erDiagram
         int max_rent
         int min_rooms
     }
-    match {
-        int id PK
-        int listing_id FK
-        int watch_profile_id FK
-        text status
-    }
 ```
 
 ## Relationships
@@ -56,14 +48,13 @@ erDiagram
 | app_user | watch_profile | One user has many watch profiles | Deleting a user deletes their profiles |
 | provider | listing | One provider has many listings | Blocked while listings exist |
 | provider | watch_profile | One provider is watched by many profiles | Blocked while profiles exist |
-| listing | match | One listing can match many profiles | Deleting a listing deletes its matches |
-| watch_profile | match | One profile can have many matches | Deleting a profile deletes its matches |
 
-`match` links `listing` and `watch_profile` many-to-many. A listing and profile pair can only match once.
+## Matching
+
+Matches are not stored. The view `match_candidate` works them out on every query: a listing matches a watch profile when it is available, comes from the profile's provider, is in the profile's area, costs no more than `max_rent` and has at least `min_rooms`.
 
 ## Rules enforced by the database
 
 - `app_user.email` is unique.
 - `listing`: rent > 0, rooms 1 to 6, size_m2 > 0, status is available, reserved or rented, and `external_id` is unique per provider.
 - `watch_profile`: max_rent > 0, min_rooms 1 to 6.
-- `match.status` is new, seen or applied, and defaults to new.
